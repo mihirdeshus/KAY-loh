@@ -3,40 +3,241 @@
 <head>
   <meta charset="UTF-8" />
   <title>KAY-loh – Vet Portal</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js"></script>
+  <style>
+    body {
+      background-color: #000;
+      color: #00ffff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background-color: #000;
+      color: #00ffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+    }
+
+    nav a {
+      color: #00ffff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: auto;
+      padding: 1.2rem 1rem 3rem;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-top: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .portal-cards-row {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .portal-card {
+      background: #101722;
+      color: #00ffff;
+      padding: 1.5rem 1rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: 2px solid #00ffff55;
+      border-radius: 12px;
+      box-shadow: 0 1px 8px #00ffff30;
+      min-width: 220px;
+      max-width: 240px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .portal-card:hover,
+    .portal-card.active-card {
+      background: #00ffff;
+      color: #000a14;
+      box-shadow: 0 2px 18px #00ffffaa;
+      transform: translateY(-5px) scale(1.035);
+      border-color: #00ffff;
+    }
+
+    .form-popup {
+      background: #0e0e0e;
+      border-radius: 14px;
+      box-shadow: 0 2px 25px rgba(0, 255, 255, 0.2);
+      width: 100%;
+      max-width: 520px;
+      margin: auto;
+      padding: 2rem;
+      font-size: 1.05rem;
+      display: none;
+    }
+
+    .form-popup h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.4rem;
+      color: #00ffff;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      display: block;
+      margin-bottom: 1.4rem;
+      padding: 0.75rem;
+      font-size: 1rem;
+      background: #111;
+      color: #00ffff;
+      border: 1.5px solid #00ffff88;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    .date-field {
+      position: relative;
+      margin-bottom: 1.4rem;
+    }
+
+    .date-field input[type="date"] {
+      padding-right: 2.7rem;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .date-field input[type="date"]::-webkit-calendar-picker-indicator {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .calendar-icon {
+      position: absolute;
+      top: 52%; /* adjusted for better alignment */
+      right: 1rem;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    .calendar-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: #00ffff;
+      pointer-events: none;
+    }
+
+    button {
+      background: #00ffff;
+      color: #000;
+      font-weight: bold;
+      padding: 0.75rem 1.6rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.04);
+      background: #00f0f0;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .portal-cards-row {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .form-popup {
+        padding: 1rem;
+      }
+    }
+
+    /* Custom dropdown arrow for all select fields */
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background: #111 url("data:image/svg+xml;utf8,<svg fill='cyan' height='18' width='18' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 1rem center/1.2em;
+      padding-right: 2.2em;
+      background-color: #111;
+      color: #00ffff;
+    }
+
+    /* Fix for Firefox: ensure the background-image is visible */
+    select::-ms-expand {
+      display: none;
+    }
+
+  </style>
+
   <script>
     function showVetSection(id) {
-      ['vaccination', 'visit'].forEach(sec =>
-        document.getElementById(sec + '-section').style.display = 'none'
-      );
-      ['vaccination', 'visit'].forEach(sec =>
-        document.getElementById(sec + '-tab').classList.remove('active-card')
-      );
+      ['vaccination', 'visit'].forEach(section => {
+        document.getElementById(section + '-section').style.display = 'none';
+        document.getElementById(section + '-tab').classList.remove('active-card');
+      });
+
       document.getElementById(id + '-section').style.display = 'block';
       document.getElementById(id + '-tab').classList.add('active-card');
     }
 
     function hideVetSections() {
-      ['vaccination', 'visit'].forEach(sec => {
-        document.getElementById(sec + '-section').style.display = 'none';
-        document.getElementById(sec + '-tab').classList.remove('active-card');
+      ['vaccination', 'visit'].forEach(section => {
+        document.getElementById(section + '-section').style.display = 'none';
+        document.getElementById(section + '-tab').classList.remove('active-card');
       });
     }
 
-    document.addEventListener('DOMContentLoaded', hideVetSections);
+    document.addEventListener("DOMContentLoaded", hideVetSections);
+
+    function openDatePicker(id) {
+      const input = document.getElementById(id);
+      if (input) {
+        input.focus();
+        if (typeof input.showPicker === "function") {
+          input.showPicker();
+        }
+      }
+    }
   </script>
 </head>
+
 <body>
   <nav>
     <div>KAY-loh</div>
-    <div>
-      <a href="index.html">Home</a>
-    </div>
+    <div><a href="index.html">Home</a></div>
   </nav>
 
   <div class="container">
-    <h1 class="text-center">Vet Portal</h1>
+    <h1>Vet Portal</h1>
 
     <div class="portal-cards-row">
       <div class="portal-card" id="vaccination-tab" onclick="showVetSection('vaccination')">
@@ -47,140 +248,115 @@
       </div>
     </div>
 
-    <div class="section-center-form">
+    <!-- Vaccination Form -->
+    <div class="form-popup" id="vaccination-section">
+      <h2>Vaccination Record</h2>
+      <form>
+        <label>Animal ID</label>
+        <input type="text" placeholder="e.g. A123" />
 
-      <!-- Vaccination Form -->
-      <div id="vaccination-section" class="form-popup" style="display: none;">
-        <h2>Vaccination Record</h2>
-        <form>
-          <label>Animal ID</label>
-          <input type="text" placeholder="Animal ID" />
+        <label>Medication Administered</label>
+        <input type="text" placeholder="e.g. Ivermectin" />
 
-          <label>Medication Administered</label>
-          <input type="text" placeholder="Medication" />
+        <label>Dosage</label>
+        <input type="text" placeholder="e.g. 2ml" />
 
-          <label>Dosage</label>
-          <input type="text" placeholder="Dosage" />
+        <label>Cost</label>
+        <input type="text" placeholder="e.g. $12" />
 
-          <label>Cost</label>
-          <input type="text" placeholder="Cost" />
+        <label>Vaccination Date</label>
+        <div class="date-field">
+          <input type="date" id="vaccination-date">
+          <span class="calendar-icon" onclick="openDatePicker('vaccination-date')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 11h2v2H7zm4 0h2v2h-2zm4 
+                        0h2v2h-2zM19 4h-1V2h-2v2H8V2H6v2H5a2 
+                        2 0 0 0-2 2v14a2 2 0 0 0 2 
+                        2h14a2 2 0 0 0 2-2V6a2 2 0 0 
+                        0-2-2zm0 16H5V9h14v11zM5 7V6h14v1H5z"/>
+            </svg>
+          </span>
+        </div>
 
-          <label>Date</label>
-          <div class="date-field">
-            <input type="date" id="vaccination-date" />
-            <span class="calendar-icon" onclick="openDatePicker('vaccination-date')">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="#00ffff" viewBox="0 0 24 24">
-                <path d="M7 11h2v2H7zm4 0h2v2h-2zm4 
-                  0h2v2h-2zM19 4h-1V2h-2v2H8V2H6v2H5a2 
-                  2 0 0 0-2 2v14a2 2 0 0 0 2 
-                  2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 
-                  16H5V9h14v11zM5 7V6h14v1H5z"/>
-              </svg>
-            </span>
-          </div>
+        <label>Weight</label>
+        <input type="text" placeholder="e.g. 450kg" />
 
-          <label>Weight</label>
-          <input type="text" placeholder="Weight" />
+        <label>Next Visit Date</label>
+        <div class="date-field">
+          <input type="date" id="vaccination-next-date">
+          <span class="calendar-icon" onclick="openDatePicker('vaccination-next-date')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 11h2v2H7zm4 0h2v2h-2zm4 
+                        0h2v2h-2zM19 4h-1V2h-2v2H8V2H6v2H5a2 
+                        2 0 0 0-2 2v14a2 2 0 0 0 2 
+                        2h14a2 2 0 0 0 2-2V6a2 2 0 0 
+                        0-2-2zm0 16H5V9h14v11zM5 7V6h14v1H5z"/>
+            </svg>
+          </span>
+        </div>
 
-          <label>Next Visit Date</label>
-          <div class="date-field">
-            <input type="date" id="vaccination-date" />
-            <span class="calendar-icon" onclick="openDatePicker('vaccination-date')">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="#00ffff" viewBox="0 0 24 24">
-                <path d="M7 11h2v2H7zm4 0h2v2h-2zm4 
-                  0h2v2h-2zM19 4h-1V2h-2v2H8V2H6v2H5a2 
-                  2 0 0 0-2 2v14a2 2 0 0 0 2 
-                  2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 
-                  16H5V9h14v11zM5 7V6h14v1H5z"/>
-              </svg>
-            </span>
-          </div>
+        <label>Notes</label>
+        <textarea rows="3" placeholder="Optional notes"></textarea>
 
-          <label>Notes</label>
-          <textarea rows="3" placeholder="Optional notes"></textarea>
+        <button type="submit">Record Vaccination</button>
+      </form>
+    </div>
 
-          <button type="submit">Record Vaccination</button>
-        </form>
-      </div>
+    <!-- Vet Visit Log -->
+    <div class="form-popup" id="visit-section">
+      <h2>Vet Visit Log</h2>
+      <form>
+        <label>Animal ID</label>
+        <input type="text" placeholder="e.g. A123" />
 
-      <!-- Visit Form -->
-      <div id="visit-section" class="form-popup" style="display: none;">
-        <h2>Vet Visit Log</h2>
-        <form>
-          <label>Animal ID</label>
-          <input type="text" placeholder="Animal ID" />
+        <label>Visit Date</label>
+        <div class="date-field">
+          <input type="date" id="visit-date">
+          <span class="calendar-icon" onclick="openDatePicker('visit-date')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 11h2v2H7zm4 0h2v2h-2zm4 
+                        0h2v2h-2zM19 4h-1V2h-2v2H8V2H6v2H5a2 
+                        2 0 0 0-2 2v14a2 2 0 0 0 2 
+                        2h14a2 2 0 0 0 2-2V6a2 2 0 0 
+                        0-2-2zm0 16H5V9h14v11zM5 7V6h14v1H5z"/>
+            </svg>
+          </span>
+        </div>
 
-          <label>Reason for Visit</label>
-          <select>
-            <optgroup label="Routine Care">
-              <option>Physical examinations</option>
-              <option>Vaccinations</option>
-              <option>Deworming</option>
-              <option>Blood collection and testing</option>
-              <option>Pregnancy examinations</option>
-              <option>Health and travel certification</option>
-            </optgroup>
-            <optgroup label="Specialized Services">
-              <option>Reproductive health</option>
-              <option>Bull fertility testing</option>
-              <option>Herd health consultations</option>
-              <option>Nutritional advice</option>
-              <option>Disease surveillance</option>
-              <option>Post-mortem investigations</option>
-              <option>Emergency care</option>
-            </optgroup>
-            <optgroup label="Other Services">
-              <option>Dehorning</option>
-              <option>Semen collection and freezing</option>
-              <option>Farm consultations</option>
-              <option>Training and education</option>
-              <option>Other</option>
-            </optgroup>
-          </select>
+        <label>Purpose</label>
+        <select>
+          <option>Checkup</option>
+          <option>Treatment</option>
+          <option>Diagnosis</option>
+          <option>Emergency</option>
+          <option>Follow-up</option>
+        </select>
 
-          <label>Dosage</label>
-          <input type="text" placeholder="Dosage" />
+        <label>Dosage</label>
+        <input type="text" placeholder="e.g. 2ml" />
 
-          <label>Cost</label>
-          <input type="text" placeholder="Cost" />
+        <label>Cost</label>
+        <input type="number" step="0.01" placeholder="e.g. $12" />
 
-          <label>Date</label>
-          <div class="date-field">
-            <input type="date" id="visit-date" />
-            <span class="calendar-icon" onclick="openDatePicker('visit-date')">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="#00ffff" viewBox="0 0 24 24">
-                <path d="M7 11h2v2H7zm4 0h2v2h-2zm4
-                  0h2v2h-2zM19 4h-1V2h-2v2H8V2H6v2H5a2 
-                  2 0 0 0-2 2v14a2 2 0 0 0 2 
-                  2h14a2 2 0 0 0 2-2V6a2 2 0 0 
-                  0-2-2zm0 16H5V9h14v11zM5 7V6h14v1H5z"/>
-              </svg>
-            </span>
-          </div>
+        <label>Next Visit Date</label>
+        <div class="date-field">
+          <input type="date" id="visit-next-date">
+          <span class="calendar-icon" onclick="openDatePicker('visit-next-date')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 11h2v2H7zm4 0h2v2h-2zm4 
+                        0h2v2h-2zM19 4h-1V2h-2v2H8V2H6v2H5a2 
+                        2 0 0 0-2 2v14a2 2 0 0 0 2 
+                        2h14a2 2 0 0 0 2-2V6a2 2 0 0 
+                        0-2-2zm0 16H5V9h14v11zM5 7V6h14v1H5z"/>
+            </svg>
+          </span>
+        </div>
 
-          <label>Weight</label>
-          <input type="text" placeholder="Weight" />
+        <label>Observations</label>
+        <textarea rows="3" placeholder="What was observed"></textarea>
 
-          <label>Next Visit Date</label>
-          <div class="date-field">
-            <input type="date" id="vaccination-date" />
-            <span class="calendar-icon" onclick="openDatePicker('vaccination-date')">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="#00ffff" viewBox="0 0 24 24">
-                <path d="M7 11h2v2H7zm4 0h2v2h-2zm4 
-                  0h2v2h-2zM19 4h-1V2h-2v2H8V2H6v2H5a2 
-                  2 0 0 0-2 2v14a2 2 0 0 0 2 
-                  2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 
-                  16H5V9h14v11zM5 7V6h14v1H5z"/>
-              </svg>
-            </span>
-          </div>
-
-          <label>Observations</label>
-          <textarea rows="3" placeholder="Optional observations"></textarea>
-
-          <button type="submit">Log Visit</button>
-        </form>
-      </div>
+        <button type="submit">Log Visit</button>
+      </form>
     </div>
   </div>
 </body>
