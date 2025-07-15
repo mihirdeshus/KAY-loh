@@ -1,0 +1,93 @@
+<!-- VET PORTAL (vet.html): black/cyan theme, two choices shown, reason for visit is a dropdown -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KAY-loh – Vet Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function showVetSection(id) {
+      ['vaccination','visit'].forEach(sec => 
+        document.getElementById(sec+'-section').style.display = 'none'
+      );
+      document.getElementById(id+'-section').style.display = 'block';
+    }
+    function hideVetSections() {
+      ['vaccination','visit'].forEach(sec => 
+        document.getElementById(sec+'-section').style.display = 'none'
+      );
+    }
+    window.onload = hideVetSections;
+  </script>
+</head>
+<body>
+  <nav>
+    <div>KAY-loh</div>
+    <div>
+      <a href="index.html">Home</a>
+    </div>
+  </nav>
+  <div class="container">
+    <h1>Vet Portal</h1>
+    <div class="portal-choices">
+      <button onclick="showVetSection('vaccination')">Vaccination Record</button>
+      <button onclick="showVetSection('visit')">Vet Visit Log</button>
+    </div>
+    <!-- Vaccination Record -->
+    <div id="vaccination-section" style="display:none;" class="form-popup">
+      <h2>Vaccination Record</h2>
+      <form>
+        <label>Animal ID</label>
+        <input type="text" placeholder="Animal ID">
+        <label>Medication Administered</label>
+        <input type="text" placeholder="Medication">
+        <label>Date</label>
+        <input type="date">
+        <label>Notes</label>
+        <textarea rows="2"></textarea>
+        <button type="submit">Record Vaccination</button>
+      </form>
+    </div>
+    <!-- Vet Visit Log -->
+    <div id="visit-section" style="display:none;" class="form-popup">
+      <h2>Vet Visit Log</h2>
+      <form>
+        <label>Animal ID</label>
+        <input type="text" placeholder="Animal ID">
+        <label>Reason for Visit</label>
+        <select>
+          <optgroup label="Routine Care">
+            <option>Physical examinations</option>
+            <option>Vaccinations</option>
+            <option>Deworming</option>
+            <option>Blood collection and testing</option>
+            <option>Pregnancy examinations</option>
+            <option>Health and travel certification</option>
+          </optgroup>
+          <optgroup label="Specialized Services">
+            <option>Reproductive health</option>
+            <option>Bull fertility testing</option>
+            <option>Herd health consultations</option>
+            <option>Nutritional advice</option>
+            <option>Disease surveillance</option>
+            <option>Post-mortem investigations</option>
+            <option>Emergency care</option>
+          </optgroup>
+          <optgroup label="Other Services">
+            <option>Dehorning</option>
+            <option>Semen collection and freezing</option>
+            <option>Farm consultations</option>
+            <option>Training and education</option>
+            <option>Other</option>
+          </optgroup>
+        </select>
+        <label>Date</label>
+        <input type="date">
+        <label>Observations</label>
+        <textarea rows="2"></textarea>
+        <button type="submit">Log Visit</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
