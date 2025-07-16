@@ -4,31 +4,131 @@
   <meta charset="UTF-8">
   <title>KAY-loh – Animal Lookup</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #000;
+      color: #00ffff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background-color: #000;
+      color: #00ffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+    }
+    nav a {
+      color: #00ffff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+    h1.text-center {
+      text-align: center;
+      font-size: 2.3rem;
+      margin-bottom: 1.4rem;
+      color: #00ffff;
+    }
+    /* --- THE ONLY CHANGED PART BELOW --- */
+    .lookup-row {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 2rem;
+      gap: 2rem;
+      flex-wrap: nowrap;       /* <-- prevents wrapping! */
+      overflow-x: auto;        /* <-- scrolls horizontally if too wide */
+      min-width: 0;
+    }
+    .lookup-card {
+      background: #101722;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px #00ffff25;
+      padding: 1.4rem 1.2rem 1rem 1.2rem;
+      min-width: 250px;
+      max-width: 350px;
+      margin: 1rem 0;
+      flex: 1 1 0px;
+    }
+    .lookup-card button {
+      background: #00ffff;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .lookup-detail {
+      margin-top: 1rem;
+    }
+    .lookup-chain-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      margin-top: 2rem;
+    }
+    .lookup-chain-block {
+      background: #101722;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px #00ffff25;
+      color: #00ffff;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+    .lookup-chain-block h2 {
+      margin: 0 0 0.6rem;
+      font-size: 1.3rem;
+      color: #00ffff;
+    }
+    .lookup-chain-arrow {
+      font-size: 6rem;
+      color: #00ffffbb;
+      margin: -0.5rem 0;
+    }
+    .animal-id-display {
+      text-align: center;
+      color: #fff;
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      font-style: italic;
+    }
+    .hidden {
+      display: none !important;
+    }
+  </style>
   <script>
+    // --- scripts unchanged (copied as before) ---
     function showLookupDetail(id) {
       document.querySelectorAll('.lookup-detail').forEach(div => div.style.display = 'none');
       document.getElementById(id).style.display = 'block';
     }
-
     function redirectToChainById() {
       const id = document.getElementById('search-animal-id').value.trim();
       if (id) {
-        window.location.href = `lookup-chain.html?animal_id=${encodeURIComponent(id)}`;
+        showAnimalHistory(id);
       }
     }
-
     function redirectToChainByQR() {
-      window.location.href = "lookup-chain.html?animal_id=5678";
+      showAnimalHistory('5678');
     }
-
     function showFilterResults(event) {
       event.preventDefault();
       const type = document.getElementById('type').value;
       const results = document.getElementById('filter-results');
-
-      // Clear previous
       results.innerHTML = '';
-
       if (type === 'Cattle') {
         results.innerHTML = `
           <h4 style="margin-top: 1.5rem;">Matching Cattle:</h4>
@@ -44,21 +144,21 @@
             </thead>
             <tbody>
               <tr>
-                <td style="padding: 0.5rem;">1234</td>
+                <td style="padding: 0.5rem; cursor:pointer;" onclick="showAnimalHistory('1234')">1234</td>
                 <td style="padding: 0.5rem;">Holstein</td>
                 <td style="padding: 0.5rem;">4 yrs</td>
                 <td style="padding: 0.5rem;">Eastern Cape</td>
                 <td style="padding: 0.5rem;">Active</td>
               </tr>
               <tr>
-                <td style="padding: 0.5rem;">1251</td>
+                <td style="padding: 0.5rem; cursor:pointer;" onclick="showAnimalHistory('1251')">1251</td>
                 <td style="padding: 0.5rem;">Angus</td>
                 <td style="padding: 0.5rem;">6 yrs</td>
                 <td style="padding: 0.5rem;">Western Cape</td>
                 <td style="padding: 0.5rem;">Healthy</td>
               </tr>
               <tr>
-                <td style="padding: 0.5rem;">1327</td>
+                <td style="padding: 0.5rem; cursor:pointer;" onclick="showAnimalHistory('1327')">1327</td>
                 <td style="padding: 0.5rem;">Brahman</td>
                 <td style="padding: 0.5rem;">5 yrs</td>
                 <td style="padding: 0.5rem;">UCT</td>
@@ -66,6 +166,7 @@
               </tr>
             </tbody>
           </table>
+          <div style="margin-top:0.5rem; font-size:0.9rem; color:#00ffff88;">Tip: click on an animal ID to view history</div>
         `;
       } else {
         results.innerHTML = `
@@ -73,17 +174,45 @@
         `;
       }
     }
+    function showAnimalHistory(animalId) {
+      document.getElementById('main-lookup').classList.add('hidden');
+      document.getElementById('animal-history').classList.remove('hidden');
+      document.getElementById('animal-id-display').textContent = animalId ? `Animal ID: ${animalId}` : '';
+      document.getElementById('nav-home').classList.add('hidden');
+      document.getElementById('nav-back').classList.remove('hidden');
+      history.replaceState({}, "", "?animal_id=" + encodeURIComponent(animalId));
+    }
+    function showMainLookup() {
+      document.getElementById('animal-history').classList.add('hidden');
+      document.getElementById('main-lookup').classList.remove('hidden');
+      document.getElementById('nav-home').classList.remove('hidden');
+      document.getElementById('nav-back').classList.add('hidden');
+      history.replaceState({}, "", "lookup.html");
+      document.querySelectorAll('.lookup-detail').forEach(div => div.style.display = 'none');
+    }
+    window.onload = () => {
+      const params = new URLSearchParams(window.location.search);
+      const animalId = params.get('animal_id');
+      if (animalId) {
+        showAnimalHistory(animalId);
+      } else {
+        showMainLookup();
+      }
+    };
   </script>
 </head>
 <body>
   <nav>
     <div>KAY-loh</div>
-    <div><a href="index.html">Home</a></div>
+    <div>
+      <a id="nav-home" href="index.html">Home</a>
+      <a id="nav-back" href="#" onclick="showMainLookup()" class="hidden">Back to Lookup</a>
+    </div>
   </nav>
 
-  <div class="container">
+  <!-- Lookup Main Page -->
+  <div id="main-lookup" class="container">
     <h1 class="text-center">Animal Lookup</h1>
-
     <div class="lookup-row">
       <!-- Filter Section -->
       <div class="lookup-card">
@@ -112,7 +241,6 @@
             <input type="text" id="location" placeholder="Farm, region" />
             <button type="submit">Apply Filters</button>
           </form>
-
           <div id="filter-results"></div>
         </div>
       </div>
@@ -140,6 +268,61 @@
             <input type="file" accept="image/*" onchange="redirectToChainByQR();" />
           </form>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animal History Timeline Page -->
+  <div id="animal-history" class="container hidden">
+    <h1 class="text-center">Animal History Timeline</h1>
+    <div id="animal-id-display" class="animal-id-display"></div>
+    <div class="lookup-chain-container">
+      <div class="lookup-chain-block">
+        <h2>Weight Check</h2>
+        <ul>
+          <li><strong>Date:</strong> 2024-06-01</li>
+          <li><strong>Weight:</strong> 420kg</li>
+          <li><strong>Vet:</strong> Dr. L. Nkosi</li>
+        </ul>
+        <p>Condition: Healthy. Ready for next vaccination.</p>
+      </div>
+      <div class="lookup-chain-arrow">↑</div>
+      <div class="lookup-chain-block">
+        <h2>Vaccination</h2>
+        <ul>
+          <li><strong>Date:</strong> 2024-04-10</li>
+          <li><strong>Vaccine:</strong> FMD</li>
+          <li><strong>Technique:</strong> Subcutaneous</li>
+        </ul>
+        <p>Next dose required in 6 months.</p>
+      </div>
+      <div class="lookup-chain-arrow">↑</div>
+      <div class="lookup-chain-block">
+        <h2>Gestation Update</h2>
+        <ul>
+          <li><strong>Date Recorded:</strong> 2023-11-12</li>
+          <li><strong>Conceived:</strong> Yes</li>
+        </ul>
+      </div>
+      <div class="lookup-chain-arrow">↑</div>
+      <div class="lookup-chain-block">
+        <h2>Breeding Report</h2>
+        <ul>
+          <li><strong>Start Date:</strong> 2023-10-01</li>
+          <li><strong>End Date:</strong> 2023-10-15</li>
+        </ul>
+        <p>Breeding via AI - Angus Semen. Confirmed heat observation twice.</p>
+      </div>
+      <div class="lookup-chain-arrow">↑</div>
+      <div class="lookup-chain-block">
+        <h2>Birth Registration</h2>
+        <ul>
+          <li><strong>Born:</strong> 2022-01-23</li>
+          <li><strong>Breed:</strong> Angus</li>
+          <li><strong>Weight at Birth:</strong> 38 kg</li>
+          <li><strong>Mother ID:</strong> 8829</li>
+          <li><strong>Farm:</strong> Mabandla Farm, Eastern Cape</li>
+        </ul>
       </div>
     </div>
   </div>
