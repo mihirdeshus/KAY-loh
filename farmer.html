@@ -1,89 +1,312 @@
-<!-- FARMER PORTAL: farmer.html (applies black/cyan theme, sections are independent, forms hidden until selected) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>KAY-loh – Farmer Portal</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #000;
+      color: #00ffff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background-color: #000;
+      color: #00ffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+    }
+
+    nav a {
+      color: #00ffff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 1.2rem 1rem 3rem;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-top: 0.5rem;
+      margin-bottom: 2.3rem;
+    }
+
+    .portal-cards-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.6rem;
+      margin-bottom: 2.6rem;
+    }
+
+    .portal-card {
+      background: #101722;
+      color: #00ffff;
+      padding: 1.2rem 1rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: 2px solid #00ffff55;
+      border-radius: 12px;
+      box-shadow: 0 1px 8px #00ffff30;
+      width: 230px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.18s ease-in-out;
+    }
+
+    .portal-card:hover,
+    .portal-card.active-card {
+      background: #00ffff;
+      color: #000a14;
+      transform: translateY(-6px);
+      box-shadow: 0 2px 22px #00ffffaa;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .form-popup {
+      background: #0e0e0e;
+      border-radius: 14px;
+      box-shadow: 0 2px 25px rgba(0, 255, 255, 0.2);
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      padding: 2rem;
+      font-size: 1.05rem;
+    }
+
+    .form-popup h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.4rem;
+      color: #00ffff;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      display: block;
+      margin-bottom: 1.2rem;
+      padding: 0.75rem;
+      font-size: 1rem;
+      background: #111;
+      color: #00ffff;
+      border: 1.5px solid #00ffff88;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    .date-field {
+      position: relative;
+      margin-bottom: 1.2rem;
+    }
+
+    .date-field input[type="date"] {
+      padding-right: 2.6rem;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .date-field input[type="date"]::-webkit-calendar-picker-indicator {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .calendar-icon {
+      position: absolute;
+      top: 52%;
+      right: 1rem;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    .calendar-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: #00ffff;
+      pointer-events: none;
+    }
+
+    .button {
+      background: #00ffff;
+      color: #000;
+      font-weight: bold;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .button:hover {
+      transform: scale(1.04);
+      background: #0ef;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    @media (max-width: 700px) {
+      .portal-cards-row {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .form-popup {
+        padding: 1rem;
+      }
+    }
+  </style>
+
   <script>
-    // Functions to show/hide independent forms
     function showSection(id) {
-      const sections = ['breeding', 'gestation', 'birth', 'misc'];
-      sections.forEach(section => {
-        document.getElementById(section+'-section').style.display = 'none';
+      const all = ['breeding', 'gestation', 'birth', 'misc'];
+      all.forEach(section => {
+        document.getElementById(section + '-section').classList.add('hidden');
+        document.getElementById(section + '-tab').classList.remove('active-card');
       });
-      document.getElementById(id+'-section').style.display = 'block';
+      document.getElementById(id + '-section').classList.remove('hidden');
+      document.getElementById(id + '-tab').classList.add('active-card');
     }
-    function hideSections() {
-      const sections = ['breeding', 'gestation', 'birth', 'misc'];
-      sections.forEach(section => {
-        document.getElementById(section+'-section').style.display = 'none';
-      });
+
+    function openDatePicker(id) {
+      const input = document.getElementById(id);
+      if (input) {
+        input.focus();
+        if (typeof input.showPicker === 'function') {
+          input.showPicker();
+        }
+      }
     }
-    window.onload = hideSections;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      showSection('breeding');
+    });
   </script>
 </head>
+
 <body>
   <nav>
     <div>KAY-loh</div>
-    <div>
-      <a href="index.html">Home</a>
-    </div>
+    <div><a href="index.html">Home</a></div>
   </nav>
+
   <div class="container">
     <h1>Farmer Portal</h1>
-    <div class="portal-choices">
-      <button onclick="showSection('breeding')">Breeding Event Input</button>
-      <button onclick="showSection('gestation')">Gestation Tracking</button>
-      <button onclick="showSection('birth')">Birth Registration</button>
-      <button onclick="showSection('misc')">Miscellaneous / Weight Update</button>
+
+    <div class="portal-cards-row">
+      <div class="portal-card" id="breeding-tab" onclick="showSection('breeding')">Breeding Event Input</div>
+      <div class="portal-card" id="gestation-tab" onclick="showSection('gestation')">Gestation Tracking</div>
+      <div class="portal-card" id="birth-tab" onclick="showSection('birth')">Birth Registration</div>
+      <div class="portal-card" id="misc-tab" onclick="showSection('misc')">Miscellaneous / Weight</div>
     </div>
-    
-    <!-- Breeding Event Input -->
-    <div id="breeding-section" style="display:none;" class="form-popup">
+
+    <!-- Breeding Section -->
+    <div id="breeding-section" class="form-popup">
       <h2>Breeding Event Input</h2>
       <form>
         <label>Animal IDs (comma separated)</label>
-        <input type="text" placeholder="e.g. 1234, 5678">
-        <label>Event Start Date</label>
-        <input type="date">
-        <label>Event End Date</label>
-        <input type="date">
-        <label>Breeding Date</label>
-        <input type="date">
-        <button type="submit">Submit Breeding Event</button>
+        <input type="text" placeholder="e.g. 1234, 5678"/>
+
+        <div class="date-field">
+          <label>Event Start Date</label>
+          <input type="date" id="breeding-start-date" />
+          <span class="calendar-icon" onclick="openDatePicker('breeding-start-date')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 11h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zM19 4h-1V2h-2v2H8V2H6v2H5a2 
+                2 0 0 0-2 2v14a2 2 0 0 0 2 
+                2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM5 7V6h14v1H5z"
+              />
+            </svg>
+          </span>
+        </div>
+
+        <div class="date-field">
+          <label>Event End Date</label>
+          <input type="date" id="breeding-end-date" />
+          <span class="calendar-icon" onclick="openDatePicker('breeding-end-date')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 11h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zM19 4h-1V2h-2v2H8V2H6v2H5a2 
+                2 0 0 0-2 2v14a2 2 0 0 0 2 
+                2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM5 7V6h14v1H5z"/>
+            </svg>
+          </span>
+        </div>
+
+        <button type="submit" class="button">Submit Breeding Event</button>
       </form>
     </div>
 
-    <!-- Gestation Tracking -->
-    <div id="gestation-section" style="display:none;" class="form-popup">
+    <!-- Gestation Section -->
+    <div id="gestation-section" class="form-popup hidden">
       <h2>Gestation Tracking</h2>
       <form>
         <label>Animal ID</label>
-        <input type="text" placeholder="Animal ID">
+        <input type="text" placeholder="Animal ID"/>
+
         <label>Did it conceive?</label>
-        <div style="display: flex; justify-content: center; gap:2em;">
-          <label><input type="radio" name="conceived" value="yes" required> Yes</label>
-          <label><input type="radio" name="conceived" value="no" required> No</label>
+        <div style="display: flex; gap: 3rem; margin-bottom: 1.2rem;">
+          <label><input type="radio" name="conceived" value="yes" /> Yes</label>
+          <label><input type="radio" name="conceived" value="no" /> No</label>
         </div>
-        <label>Date Observed</label>
-        <input type="date">
-        <button type="submit">Save Gestation Update</button>
+
+        <div class="date-field">
+          <label>Date Observed</label>
+          <input type="date" id="gestation-date" />
+          <span class="calendar-icon" onclick="openDatePicker('gestation-date')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 11h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zM19 4h-1V2h-2v2H8V2H6v2H5a2 
+                2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 
+                2 0 0 0 2-2V6a2 2 0 0 0-2-2zM5 7V6h14v1H5z"/>
+            </svg>
+          </span>
+        </div>
+
+        <button type="submit" class="button">Save Gestation Update</button>
       </form>
     </div>
 
-    <!-- Birth Registration -->
-    <div id="birth-section" style="display:none;" class="form-popup">
+    <!-- Birth Section -->
+    <div id="birth-section" class="form-popup hidden">
       <h2>Birth Registration</h2>
       <form>
-        <label>Date</label>
-        <input type="date">
+        <div class="date-field">
+          <label>Date</label>
+          <input type="date" id="birth-date" />
+          <span class="calendar-icon" onclick="openDatePicker('birth-date')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 11h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zM19 
+                4h-1V2h-2v2H8V2H6v2H5a2 2 0 
+                0 0-2 2v14a2 2 0 0 0 2 
+                2h14a2 2 0 0 0 2-2V6a2 2 
+                0 0 0-2-2zM5 7V6h14v1H5z"/>
+            </svg>
+          </span>
+        </div>
         <label>Mother's ID</label>
-        <input type="text" placeholder="e.g. 1234">
+        <input type="text" placeholder="e.g. 1234" />
         <label>Mother's Weight (kg)</label>
-        <input type="number" min="0" placeholder="e.g. 400">
+        <input type="number" min="0" placeholder="e.g. 400" />
         <label>Offspring Breed</label>
-        <input type="text" placeholder="e.g. Holstein, Merino, etc.">
+        <input type="text" placeholder="e.g. Holstein, Merino, etc." />
         <label>Offspring Purpose</label>
         <select>
           <option>Dairy</option>
@@ -95,13 +318,13 @@
           <option>Other</option>
         </select>
         <label>Offspring Weight (kg)</label>
-        <input type="number" min="0">
-        <button type="submit">Register Birth</button>
+        <input type="number" min="0" />
+        <button type="submit" class="button">Register Birth</button>
       </form>
     </div>
 
-    <!-- Miscellaneous / Weight Update -->
-    <div id="misc-section" style="display:none;" class="form-popup">
+    <!-- Misc Section -->
+    <div id="misc-section" class="form-popup hidden">
       <h2>Miscellaneous / Weight Update</h2>
       <form>
         <label>Choose Update Type:</label>
@@ -113,14 +336,25 @@
           <option>Health Check</option>
         </select>
         <label>Animal ID</label>
-        <input type="text" placeholder="Animal ID">
-        <label>Date</label>
-        <input type="date">
-        <label>Weight (kg) <span style="font-size:0.85em">(if applicable)</span></label>
-        <input type="number" min="0">
-        <label>Vet Sign-off (alphanumeric)</label>
-        <input type="text" placeholder="Enter vet code / number">
-        <button type="submit">Save Miscellaneous Event</button>
+        <input type="text" placeholder="Animal ID" />
+        <div class="date-field">
+          <label>Date</label>
+          <input type="date" id="misc-date" />
+          <span class="calendar-icon" onclick="openDatePicker('misc-date')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 11h2v2H7zm4 0h2v2h-2zm4 
+                0h2v2h-2zM19 4h-1V2h-2v2H8V2H6v2H5a2 
+                2 0 0 0-2 2v14a2 2 0 
+                0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 
+                0 0 0-2-2zM5 7V6h14v1H5z"/>
+            </svg>
+          </span>
+        </div>
+        <label>Weight (kg)</label>
+        <input type="number" min="0" />
+        <label>Vet Sign-off</label>
+        <input type="text" placeholder="Vet ID or signature" />
+        <button type="submit" class="button">Save Entry</button>
       </form>
     </div>
   </div>
