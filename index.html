@@ -1,39 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>KAY-loh – Empowering Livestock Farmers</title>
+  <meta charset="UTF-8">
+  <title>KAY-loh – Home</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <nav>
     <div>KAY-loh</div>
+    <div class="nav-links">
+      <a href="admin.html" class="admin-login-btn">Admin Login</a>
+    </div>
   </nav>
-
-  <div class="container">
+  <div class="container landing-header">
     <h1>Welcome to KAY-loh</h1>
     <p>
-      KAY-loh is a blockchain-powered platform for all livestock farmers and vets.<br />
+      KAY-loh is a blockchain-powered platform for livestock farmers and vets.<br>
       Securely manage breeding, health, and compliance records for any animal.
     </p>
-
-    <!-- Farmer Portal -->
-    <a href="farmer.html" class="portal-button" aria-label="Farmer Portal">
-      <img src="images/Farmer.jpeg" alt="Breeding farm landscape" />
-      <div class="portal-text">Farmer Portal</div>
-    </a>
-
-    <!-- Vet Portal -->
-    <a href="vet.html" class="portal-button" aria-label="Vet Portal">
-      <img src="images/Vet.jpeg" alt="Veterinarian with livestock" />
-      <div class="portal-text">Vet Portal</div>
-    </a>
-
-    <!-- Animal Lookup -->
-    <a href="lookup.html" class="portal-button" aria-label="Animal Lookup">
-      <img src="images/Lookup.jpg" alt="Livestock animals" />
-      <div class="portal-text">Animal Lookup</div>
-    </a>
+    <div class="portal-row">
+      <a href="farmer-login.html" class="portal-button">
+        <img src="images/Farmer.jpeg" alt="Farmer Portal">
+        <div class="portal-text">Farmer Portal</div>
+      </a>
+      <a href="vet-login.html" class="portal-button">
+        <img src="images/Vet.jpeg" alt="Vet Portal">
+        <div class="portal-text">Vet Portal</div>
+      </a>
+      <a href="lookup.html" class="portal-button">
+        <img src="images/Lookup.jpg" alt="Animal Lookup">
+        <div class="portal-text">Animal Lookup</div>
+      </a>
+    </div>
   </div>
 </body>
 </html>
