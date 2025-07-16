@@ -5,12 +5,19 @@
   <title>KAY-loh – Animal Lookup</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    body {
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
       background: #000;
       color: #00ffff;
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      min-width: 100vw;
+      box-sizing: border-box;
     }
     nav {
       background-color: #000;
@@ -27,9 +34,13 @@
       font-size: 1.2rem;
     }
     .container {
-      max-width: 800px;
+      max-width: 1400px;
       margin: auto;
       padding: 2rem 1rem;
+      /* prevent vertical scrollbars if inner content grows */
+      overflow: hidden;
+      box-sizing: border-box;
+      min-height: calc(100vh - 5rem);
     }
     h1.text-center {
       text-align: center;
@@ -37,25 +48,34 @@
       margin-bottom: 1.4rem;
       color: #00ffff;
     }
-    /* --- THE ONLY CHANGED PART BELOW --- */
+
+    /* Lock cards side by side in a single row, even on narrow screens */
     .lookup-row {
       display: flex;
-      justify-content: space-around;
-      margin-top: 2rem;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;        
+      overflow-y: visible;    
       gap: 2rem;
-      flex-wrap: nowrap;       /* <-- prevents wrapping! */
-      overflow-x: auto;        /* <-- scrolls horizontally if too wide */
+      margin-top: 2rem;
       min-width: 0;
+      width: 100%;
+      align-items: stretch;
     }
     .lookup-card {
       background: #101722;
       border-radius: 16px;
       box-shadow: 0 10px 40px #00ffff25;
-      padding: 1.4rem 1.2rem 1rem 1.2rem;
-      min-width: 250px;
-      max-width: 350px;
+      padding: 2rem 1.8rem 1.6rem 1.8rem;
+      min-width: 320px;
+      max-width: 440px;
+      flex: 1 1 0;
       margin: 1rem 0;
-      flex: 1 1 0px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      overflow: hidden;
     }
     .lookup-card button {
       background: #00ffff;
@@ -76,6 +96,7 @@
       align-items: center;
       gap: 0;
       margin-top: 2rem;
+      width: 100%;
     }
     .lookup-chain-block {
       background: #101722;
@@ -87,6 +108,7 @@
       max-width: 500px;
       margin-bottom: 1rem;
       font-size: 1.05rem;
+      box-sizing: border-box;
     }
     .lookup-chain-block h2 {
       margin: 0 0 0.6rem;
@@ -108,18 +130,45 @@
     .hidden {
       display: none !important;
     }
+    /* On small screens, force min-width of cards but keep in a row, don't wrap */
+    @media (max-width: 840px) {
+      .container {
+        max-width: 99vw;
+        padding: 1rem 0.3rem;
+      }
+      .lookup-row {
+        gap: 1rem;
+      }
+      .lookup-card {
+        min-width: 140px;
+        padding: 1rem 0.5rem 0.7rem 0.5rem;
+      }
+    }
+    @media (max-width: 700px) {
+      .container {
+        padding: 0.5rem 0.1rem;
+      }
+      .lookup-row {
+        gap: 0.4rem;
+      }
+      .lookup-card {
+        min-width: 90px;
+        max-width: 240px;
+        padding: 0.4rem 0.1rem 0.4rem 0.1rem;
+      }
+    }
+    /* Hide horizontal overflow at all times, remove scrollbar */
+    ::-webkit-scrollbar { display: none; }
   </style>
   <script>
-    // --- scripts unchanged (copied as before) ---
+    // -- Your functional logic as before --
     function showLookupDetail(id) {
       document.querySelectorAll('.lookup-detail').forEach(div => div.style.display = 'none');
       document.getElementById(id).style.display = 'block';
     }
     function redirectToChainById() {
       const id = document.getElementById('search-animal-id').value.trim();
-      if (id) {
-        showAnimalHistory(id);
-      }
+      if (id) showAnimalHistory(id);
     }
     function redirectToChainByQR() {
       showAnimalHistory('5678');
@@ -209,12 +258,10 @@
       <a id="nav-back" href="#" onclick="showMainLookup()" class="hidden">Back to Lookup</a>
     </div>
   </nav>
-
   <!-- Lookup Main Page -->
   <div id="main-lookup" class="container">
     <h1 class="text-center">Animal Lookup</h1>
     <div class="lookup-row">
-      <!-- Filter Section -->
       <div class="lookup-card">
         <button onclick="showLookupDetail('filter-detail')">Find by Filters</button>
         <div id="filter-detail" class="lookup-detail" style="display:none;">
@@ -244,8 +291,6 @@
           <div id="filter-results"></div>
         </div>
       </div>
-
-      <!-- Lookup by ID -->
       <div class="lookup-card">
         <button onclick="showLookupDetail('id-detail')">Lookup by Animal ID</button>
         <div id="id-detail" class="lookup-detail" style="display:none;">
@@ -257,8 +302,6 @@
           </form>
         </div>
       </div>
-
-      <!-- QR Scan -->
       <div class="lookup-card">
         <button onclick="showLookupDetail('qr-detail')">Scan Animal Tag (QR)</button>
         <div id="qr-detail" class="lookup-detail" style="display:none;">
@@ -271,7 +314,6 @@
       </div>
     </div>
   </div>
-
   <!-- Animal History Timeline Page -->
   <div id="animal-history" class="container hidden">
     <h1 class="text-center">Animal History Timeline</h1>
