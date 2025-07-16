@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KAY-loh – Animal History</title>
+  <style>
+    body {
+      background: #000;
+      color: #00ffff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background-color: #000;
+      color: #00ffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+    }
+    nav a {
+      color: #00ffff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+    h1.text-center {
+      text-align: center;
+      font-size: 2.3rem;
+      margin-bottom: 1.4rem;
+      color: #00ffff;
+    }
+    .lookup-chain-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      margin-top: 2rem;
+    }
+    .lookup-chain-block {
+      background: #101722;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px #00ffff25;
+      color: #00ffff;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+    .lookup-chain-block h2 {
+      margin: 0 0 0.6rem;
+      font-size: 1.3rem;
+      color: #00ffff;
+    }
+    .lookup-chain-arrow {
+      font-size: 6rem;
+      color: #00ffffbb;
+      margin: -0.5rem 0;
+    }
+    .animal-id-display {
+      text-align: center;
+      color: #fff;
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      font-style: italic;
+    }
+  </style>
+
+  <script>
+    window.onload = () => {
+      const params = new URLSearchParams(window.location.search);
+      const animalId = params.get('animal_id');
+      document.getElementById('animal-id-display').textContent = animalId ? `Animal ID: ${animalId}` : '';
+    };
+  </script>
+</head>
+<body>
+  <nav>
+    <div>KAY-loh</div>
+    <div><a href="lookup.html">Back to Lookup</a></div>
+  </nav>
+
+  <div class="container">
+    <h1 class="text-center">Animal History Timeline</h1>
+    <div id="animal-id-display" class="animal-id-display"></div>
+
+    <div class="lookup-chain-container">
+
+      <div class="lookup-chain-block">
+        <h2>Weight Check</h2>
+        <ul>
+          <li><strong>Date:</strong> 2024-06-01</li>
+          <li><strong>Weight:</strong> 420kg</li>
+          <li><strong>Vet:</strong> Dr. L. Nkosi</li>
+        </ul>
+        <p>Condition: Healthy. Ready for next vaccination.</p>
+      </div>
+
+      <div class="lookup-chain-arrow">↑</div>
+
+      <div class="lookup-chain-block">
+        <h2>Vaccination</h2>
+        <ul>
+          <li><strong>Date:</strong> 2024-04-10</li>
+          <li><strong>Vaccine:</strong> FMD</li>
+          <li><strong>Technique:</strong> Subcutaneous</li>
+        </ul>
+        <p>Next dose required in 6 months.</p>
+      </div>
+
+      <div class="lookup-chain-arrow">↑</div>
+
+      <div class="lookup-chain-block">
+        <h2>Gestation Update</h2>
+        <ul>
+          <li><strong>Date Recorded:</strong> 2023-11-12</li>
+          <li><strong>Conceived:</strong> Yes</li>
+        </ul>
+      </div>
+
+      <div class="lookup-chain-arrow">↑</div>
+
+      <div class="lookup-chain-block">
+        <h2>Breeding Report</h2>
+        <ul>
+          <li><strong>Start Date:</strong> 2023-10-01</li>
+          <li><strong>End Date:</strong> 2023-10-15</li>
+        </ul>
+        <p>Breeding via AI - Angus Semen. Confirmed heat observation twice.</p>
+      </div>
+
+      <div class="lookup-chain-arrow">↑</div>
+
+      <div class="lookup-chain-block">
+        <h2>Birth Registration</h2>
+        <ul>
+          <li><strong>Born:</strong> 2022-01-23</li>
+          <li><strong>Breed:</strong> Angus</li>
+          <li><strong>Weight at Birth:</strong> 38 kg</li>
+          <li><strong>Mother ID:</strong> 8829</li>
+          <li><strong>Farm:</strong> Mabandla Farm, Eastern Cape</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
